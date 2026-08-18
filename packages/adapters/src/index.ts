@@ -7,3 +7,4 @@ export * from "./check.ts";
 export * from "./registry.ts";
 export * from "./mock.ts";
 export * from "./seedance25.ts";
+export * from "./kling3.ts";

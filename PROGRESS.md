@@ -55,6 +55,19 @@
 - beat 内"说完之后"类后置反应目前排在对白前（action 单字段的顺序局限）——若红线测试显示影响兑现，schema 加 `actionAfterDialogue` 或 beat 拆分。
 - Seedance25 `render()` 显式未接线（M5 接 provider API）。
 
+## 2026-08-18 · M3.5 关账（60/60 全绿）——双模型编译闭环 + 代码上 GitHub
+
+**调研先行**（用户指定方式）：Kling 官方 API 文档调研留存于 [knowledge/kling-3-adapter-notes.md](knowledge/kling-3-adapter-notes.md)（官方 kling.ai 拦截无凭证抓取，经 API 镜像文档交叉验证：时长 3–15s、multi-shot ≤6镜/≤15s、prompt ≤2500 字符、v3 无独立 camera_control 字段、cfg_scale 默认 0.5）。
+
+**完成**
+- `Kling3Adapter`（kling-v3 / std）：已验证 `【start–end s｜状态】` 分段框架编译（时间无"约"、节奏参考声明、原地锁定措辞、单人约束尾行）；API 配置与 prompt 正文分离；官方 2500 字符上限编译期强制。
+- **诚实能力的两条硬拒绝**（测试锁定）：30s 分手戏编译到 Kling → duration 拒绝（>15s 官方上限）+ shots 拒绝（v0 仅单镜 actor cut 有成片证据，multi_prompt 待红线测试解锁）；Kling 侧 dialogue → experimental 告警。
+- Schema 演进：`beat.window?: [start, end]`（Kling 分段框架的真实需要；镜内有序 + 不越总时长校验）；缺省时 adapter 显式均分（`resolveBeatWindows`，确定性，末段收口于总时长）。
+- Kling golden fixture = skill 已验证"久别重逢"样例（8s/4 beats/静止/原地锁定）；快照 `reunion.kling3.prompt.txt` 与已验证 prompt 同构。
+- 代码托管：`github.com/Anelse0/anelse` main 分支（用户提供 remote）。
+
+**核心卖点首次成立**：同一套 Recipe schema，两个 adapter 各自编译出与真实已验证 prompt 同构的产物——"一份调度，多模型编译"闭环。
+
 **待办衔接**
-- M3.5 余下：Kling 3.0 adapter（`【0–t｜状态】`时间分段框架编译）。
-- 外部依赖提醒：Supabase 项目开通（M4 前需要）。
+- 下一步 M4（apps/server：Fastify + tRPC 四 router，写走 append、读走投影）。
+- 外部依赖提醒：**Supabase 项目开通**（M4 接线前需要）；Kling 开发者凭证（接入时核对官方 API 细节）。

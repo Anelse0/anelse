@@ -23,6 +23,14 @@ const cameraMoveEnum = z.enum(vocabIds(CAMERA_MOVES));
 export const beatSchema = z.object({
   /** 状态标题（如"静立辨认"）；Kling 分段框架的段名来源。 */
   state: z.string().min(1),
+  /**
+   * 秒级时间窗 [start, end)（节奏参考，非帧级承诺）。Kling `【0–t｜状态】`
+   * 分段框架的时间来源；缺省时由 adapter 显式均分。
+   */
+  window: z
+    .tuple([z.number().nonnegative(), z.number().positive()])
+    .refine(([start, end]) => end > start, { message: "window end must be after start" })
+    .optional(),
   /** 可见动作，逐句描述；不允许空。 */
   action: z.string().min(1),
   /** 该 beat 承载的对白（一个 beat 至多一段）。 */
@@ -144,6 +152,29 @@ export const recipeSchema = z
         message: `shot durations sum to ${sum}s, exceeding total duration ${recipe.constraints.durationSec}s`,
       });
     }
+    // beat 时间窗：镜内起点非降序，终点不越过总时长。
+    recipe.shots.forEach((shot, shotIdx) => {
+      let prevStart = -1;
+      shot.beats.forEach((beat, beatIdx) => {
+        if (!beat.window) return;
+        const [start, end] = beat.window;
+        if (start < prevStart) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["shots", shotIdx, "beats", beatIdx, "window"],
+            message: "beat windows must be in non-decreasing start order within a shot",
+          });
+        }
+        if (end > recipe.constraints.durationSec) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["shots", shotIdx, "beats", beatIdx, "window"],
+            message: `beat window end ${end}s exceeds total duration ${recipe.constraints.durationSec}s`,
+          });
+        }
+        prevStart = start;
+      });
+    });
   });
 
 export type Beat = z.infer<typeof beatSchema>;
