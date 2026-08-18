@@ -19,7 +19,11 @@
   - `diff.ts`——对象递归、数组整体替换；roundtrip 不变式。
   - 测试 4 套 + golden fixture（来自已验证分手戏 30s 模板）。
 
+**验证关账（同日）**
+- 环境：brew 安装 node@22（22.23.2，keg-only：需 `export PATH="/opt/homebrew/opt/node@22/bin:$PATH"`），corepack 启用 pnpm 10.12.1。
+- `pnpm install` ✅ · `pnpm test` ✅ **23/23** · `pnpm typecheck` ✅（修复：tsconfig.base 补 `allowImportingTsExtensions` + `noEmit`）。
+- **M0 / M1 / M1.5 关账。**
+
 **待办衔接**
-- ⛔ 本机无 Node 运行时——阻塞 `pnpm install` 与测试运行（任务 #1，装法待用户确认；brew 可用）。
-- Node 就绪后：`pnpm install && pnpm test` → 全绿则关账 M0/M1/M1.5 → 开 M2（events/db）。
+- 下一步 M2（packages/events + db）：事件信封、v1 事件映射、Recipe 版本投影、Drizzle/Supabase、pg-boss。需要 Supabase 项目开通（等有真实连接串再接线，先写纯逻辑与 schema）。
 - M3.5 快照基准：resolve(breakup fixture) 的编译产物应与已验证 prompt 同构。
