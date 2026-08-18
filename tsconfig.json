@@ -4,7 +4,9 @@
     "baseUrl": ".",
     "paths": {
       "@anselse/vocab": ["packages/vocab/src/index.ts"],
-      "@anselse/recipe": ["packages/recipe/src/index.ts"]
+      "@anselse/recipe": ["packages/recipe/src/index.ts"],
+      "@anselse/events": ["packages/events/src/index.ts"],
+      "@anselse/db": ["packages/db/src/index.ts"]
     },
     "types": ["node"]
   },

@@ -7,6 +7,7 @@ export default defineConfig({
     alias: {
       "@anselse/vocab": fileURLToPath(new URL("./packages/vocab/src/index.ts", import.meta.url)),
       "@anselse/recipe": fileURLToPath(new URL("./packages/recipe/src/index.ts", import.meta.url)),
+      "@anselse/events": fileURLToPath(new URL("./packages/events/src/index.ts", import.meta.url)),
     },
   },
   test: {

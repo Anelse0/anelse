@@ -24,6 +24,23 @@
 - `pnpm install` ✅ · `pnpm test` ✅ **23/23** · `pnpm typecheck` ✅（修复：tsconfig.base 补 `allowImportingTsExtensions` + `noEmit`）。
 - **M0 / M1 / M1.5 关账。**
 
+## 2026-08-18 · M2 完成（事件日志层，37/37 全绿）
+
+**dsh 功课的落地清单**（本里程碑的设计出处）
+- 信封 = 判别式联合（mapped union over `type`，switch 免 cast 窄化）。
+- **未知必需事件拒绝重建**：`parseEvent` 在持久化边界执行；仅 `ignorable: true` 可跳过（宁过度拒绝，不静默阉割）。
+- append 强制 JSON 可序列化：结构遍历（Date/class 实例/bigint/undefined 槽位/NaN 全拒），比 roundtrip 字符串对比诚实。
+- 投影 = 纯折叠：`projectRecipeVersions` 校验 baseVersion 连续（乱序/丢事件 fails loud）；无关事件按文档化 default 穿过。
+- **Provider-visible ⟺ Logged 的可执行不变式**：`reconstructRenderRequest(events, seq)`——渲染请求仅凭日志可重建，测试锁死。
+- 边界原则：进程内 typed 信任 TS；durable 边界必过 parseEvent。
+- 文档随代码：events/db 各配 README 契约。
+
+**完成**
+- `packages/events`：ids/map（13 个 v1 事件类型，schema 与类型同源）/envelope/append/projection + 14 个测试。
+- `packages/db`：Drizzle schema（events append-only + `(project_id,seq)` 唯一；takes 读模型带完整 provenance）+ 集成待办清单（Supabase 开通后接线，无连接串测试自跳过）。
+- 修复：zod `z.unknown()` 可选性在投影边界显式归一化；序列化检查改结构遍历。
+
 **待办衔接**
-- 下一步 M2（packages/events + db）：事件信封、v1 事件映射、Recipe 版本投影、Drizzle/Supabase、pg-boss。需要 Supabase 项目开通（等有真实连接串再接线，先写纯逻辑与 schema）。
+- 下一步 M3（adapters 接口层 + MockAdapter + 编译快照测试框架）。
 - M3.5 快照基准：resolve(breakup fixture) 的编译产物应与已验证 prompt 同构。
+- 外部依赖提醒：Supabase 项目开通（M4 前需要）。
