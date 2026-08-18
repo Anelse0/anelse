@@ -68,6 +68,15 @@
 
 **核心卖点首次成立**：同一套 Recipe schema，两个 adapter 各自编译出与真实已验证 prompt 同构的产物——"一份调度，多模型编译"闭环。
 
+## 2026-08-18 · M4 骨架完成（69/69 全绿 + 真实 HTTP 冒烟通过）
+
+**完成**
+- `apps/server`：EventStore/RenderQueue 双接缝（内存 Provider 现役，Postgres/pg-boss Provider 等接线）；`AnselseService`（依赖显式注入：store/queue/adapters/ids/clock，纯逻辑可测）；tRPC 四 router（project/recipe/render/take，输入校验复用领域 schema）；Fastify 装配 + `x-actor-id` 占位认证。
+- 语义要点：写路径全走事件 append；`patchRecipe` 先验证后落日志 + baseVersion 乐观并发（`VersionConflictError` → tRPC CONFLICT）；fork = 目标项目 recipe/created(带 lineage) + recipe/forked 谱系边；requestRender 编译成功才 append + 入队（**决策：编译拒绝不落日志**——没有内容到达 provider，结构化结果即时返回 UI；将来要"尝试分析"再补事件）。
+- 测试：service 6 + router 3（createCaller 免 HTTP）+ 领域错误→tRPC 错误码映射 + wire 边界 zod 拒绝畸形 draft；`reconstructRenderRequest` 在 service 层再次锁定 Provider-visible ⟺ Logged。
+- **真实冒烟**：`node --experimental-strip-types` 直跑 main.ts，healthz + tRPC project.create 走通 HTTP。
+- **新工程约定（踩坑后确立）**：仅用可擦除 TS 语法（参数属性全库清除）——dsh source-launch 契约同款，已写入 05-dev-plan。
+
 **待办衔接**
-- 下一步 M4（apps/server：Fastify + tRPC 四 router，写走 append、读走投影）。
-- 外部依赖提醒：**Supabase 项目开通**（M4 接线前需要）；Kling 开发者凭证（接入时核对官方 API 细节）。
+- M4.5（外部依赖）：Supabase 接线——EventStore Postgres Provider、Auth JWT 替换占位、drizzle 迁移、集成测试（无连接串自跳过）。**等待用户开通 Supabase。**
+- 下一步可并行：M5 worker（用内存队列 + MockAdapter 先打通端到端渲染闭环）。

@@ -33,12 +33,16 @@ export type ParsedEvent =
   | { kind: "skipped-unknown-ignorable"; rawType: string; seq: number };
 
 export class UnknownRequiredEventError extends Error {
-  constructor(readonly rawType: string, readonly seq: number) {
+  readonly rawType: string;
+  readonly seq: number;
+  constructor(rawType: string, seq: number) {
     super(
       `unknown required event type "${rawType}" at seq ${seq}: refusing to reconstruct ` +
         `(an unrecognized required event may change how the rest of the log is interpreted)`,
     );
     this.name = "UnknownRequiredEventError";
+    this.rawType = rawType;
+    this.seq = seq;
   }
 }
 

@@ -15,9 +15,11 @@ import {
 import type { ProjectEvent } from "./envelope.ts";
 
 export class ProjectionError extends Error {
-  constructor(message: string, readonly seq: number) {
+  readonly seq: number;
+  constructor(message: string, seq: number) {
     super(`${message} (at event seq ${seq})`);
     this.name = "ProjectionError";
+    this.seq = seq;
   }
 }
 

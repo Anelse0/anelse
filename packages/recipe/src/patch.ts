@@ -16,9 +16,11 @@ export type RecipePatchOp =
 
 /** apply 前的静态检查失败（路径非法）。 */
 export class RecipePatchError extends Error {
-  constructor(message: string, readonly patchOp: RecipePatchOp) {
+  readonly patchOp: RecipePatchOp;
+  constructor(message: string, patchOp: RecipePatchOp) {
     super(message);
     this.name = "RecipePatchError";
+    this.patchOp = patchOp;
   }
 }
 

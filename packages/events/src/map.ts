@@ -14,7 +14,8 @@ import {
 } from "@anselse/recipe";
 import { takeIdSchema } from "./ids.ts";
 
-const patchOpSchema = z.union([
+/** patch 操作的 wire schema（server 路由输入复用，与 RecipePatchOp 对应）。 */
+export const patchOpSchema = z.union([
   z.object({
     op: z.literal("set"),
     path: z.array(z.union([z.string(), z.number().int()])).min(1),

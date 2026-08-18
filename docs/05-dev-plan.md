@@ -38,5 +38,6 @@
 ## 工程约定（继承 03-tech §5-7）
 
 - TS strict + ESM；所有跨边界 id 用 Branded 类型；显式 resolve 补默认，禁散落 `?? default`。
+- **仅用可擦除 TS 语法**（no parameter properties / enum / namespace）：源码需能被 Node `--experimental-strip-types` 直接运行（dsh source-launch 契约的同款约束；M4 冒烟实测踩坑后立此规矩）。
 - 测试三层：单元（vitest）→ 编译快照（无密钥）→ 真实渲染 e2e（无 key 自跳过）。
 - 依赖方向单向：`apps → adapters/db/events → recipe/vocab`（recipe/vocab 零工作区依赖），dependency-cruiser 守。

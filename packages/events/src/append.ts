@@ -9,9 +9,11 @@ import type { ProjectEvent } from "./envelope.ts";
 import type { ActorId } from "./ids.ts";
 
 export class NonSerializablePayloadError extends Error {
-  constructor(readonly eventType: string, detail: string) {
+  readonly eventType: string;
+  constructor(eventType: string, detail: string) {
     super(`event "${eventType}" payload is not JSON-serializable: ${detail}`);
     this.name = "NonSerializablePayloadError";
+    this.eventType = eventType;
   }
 }
 

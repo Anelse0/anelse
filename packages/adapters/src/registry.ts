@@ -6,9 +6,11 @@
 import type { ModelAdapter } from "./types.ts";
 
 export class DuplicateAdapterError extends Error {
-  constructor(readonly adapterId: string) {
+  readonly adapterId: string;
+  constructor(adapterId: string) {
     super(`adapter "${adapterId}" is already registered (exactly one provider per id)`);
     this.name = "DuplicateAdapterError";
+    this.adapterId = adapterId;
   }
 }
 
