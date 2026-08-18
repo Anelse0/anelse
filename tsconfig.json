@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@anselse/vocab": ["packages/vocab/src/index.ts"],
+      "@anselse/recipe": ["packages/recipe/src/index.ts"]
+    },
+    "types": ["node"]
+  },
+  "include": ["packages/*/src/**/*.ts", "packages/*/tests/**/*.ts"]
+}

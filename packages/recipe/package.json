@@ -1,0 +1,13 @@
+{
+  "name": "@anselse/recipe",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@anselse/vocab": "workspace:*",
+    "zod": "^3.24.0"
+  }
+}
