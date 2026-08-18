@@ -6,7 +6,8 @@
       "@anselse/vocab": ["packages/vocab/src/index.ts"],
       "@anselse/recipe": ["packages/recipe/src/index.ts"],
       "@anselse/events": ["packages/events/src/index.ts"],
-      "@anselse/db": ["packages/db/src/index.ts"]
+      "@anselse/db": ["packages/db/src/index.ts"],
+      "@anselse/adapters": ["packages/adapters/src/index.ts"]
     },
     "types": ["node"]
   },

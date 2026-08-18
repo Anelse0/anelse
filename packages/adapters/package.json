@@ -1,0 +1,13 @@
+{
+  "name": "@anselse/adapters",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@anselse/recipe": "workspace:*",
+    "@anselse/vocab": "workspace:*"
+  }
+}

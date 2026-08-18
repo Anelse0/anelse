@@ -18,6 +18,15 @@ importers:
         specifier: ^2.1.0
         version: 2.1.9(@types/node@22.20.1)
 
+  packages/adapters:
+    dependencies:
+      '@anselse/recipe':
+        specifier: workspace:*
+        version: link:../recipe
+      '@anselse/vocab':
+        specifier: workspace:*
+        version: link:../vocab
+
   packages/db:
     dependencies:
       '@anselse/events':

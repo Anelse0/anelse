@@ -40,7 +40,21 @@
 - `packages/db`：Drizzle schema（events append-only + `(project_id,seq)` 唯一；takes 读模型带完整 provenance）+ 集成待办清单（Supabase 开通后接线，无连接串测试自跳过）。
 - 修复：zod `z.unknown()` 可选性在投影边界显式归一化；序列化检查改结构遍历。
 
+## 2026-08-18 · M3 完成 + M3.5 过半（51/51 全绿）——编译器首次闭环 🎬
+
+**dsh 功课落地**
+- 接缝三角色成形：`types.ts` = Definition；Mock/Seedance25 = Provider；Consumer 只 import 契约。
+- 注册可逆：`registry.register()` 返回 disposer（过期 disposer 不误删后继注册，测试锁定）；重复注册 fails loud。
+- **证据门禁类型化**：`AxisSupport` 联合类型强制 `verified` 级别必须携带 `evidenceRef`——没有证据编号的"已验证"编译不过。
+- 编译期门禁：binding 不匹配/时长越界/未声明轴 → 结构化拒绝，不输出不可运行请求。
+- **无密钥编译快照**：`toMatchFileSnapshot` 锁定编译产物（可读 txt，diff 一目了然，CI 零渲染费）。
+
+**里程碑事实**：`resolve(分手戏 fixture)` 的输出与已验证真实 prompt **同构**——总纲（镜数/时长/画幅声明）、裸 `镜头 N` 标题、每句一行、`对白：`块 + delivery 独立行、表演指导逐句重述、restrain→"崩溃前结束"护栏句。快照文件：`packages/adapters/tests/__snapshots__/breakup.seedance25.prompt.txt`。
+
+**已知观察（后续打磨）**
+- beat 内"说完之后"类后置反应目前排在对白前（action 单字段的顺序局限）——若红线测试显示影响兑现，schema 加 `actionAfterDialogue` 或 beat 拆分。
+- Seedance25 `render()` 显式未接线（M5 接 provider API）。
+
 **待办衔接**
-- 下一步 M3（adapters 接口层 + MockAdapter + 编译快照测试框架）。
-- M3.5 快照基准：resolve(breakup fixture) 的编译产物应与已验证 prompt 同构。
+- M3.5 余下：Kling 3.0 adapter（`【0–t｜状态】`时间分段框架编译）。
 - 外部依赖提醒：Supabase 项目开通（M4 前需要）。
