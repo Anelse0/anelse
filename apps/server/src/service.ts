@@ -28,17 +28,7 @@ import {
   type RecipeVersions,
 } from "@anselse/events";
 import type { AdapterRegistry, AxisRejection, AxisWarning } from "@anselse/adapters";
-import type { EventStore } from "./store.ts";
-import type { RenderQueue } from "./queue.ts";
-
-export interface IdGenerator {
-  /** 生成带前缀的全局唯一 id（如 `p_…`/`r_…`）。 */
-  newId(prefix: string): string;
-}
-
-export interface Clock {
-  now(): number;
-}
+import type { EventStore, RenderQueue, IdGenerator, Clock } from "@anselse/platform";
 
 export class NotFoundError extends Error {
   constructor(what: string) {
@@ -179,6 +169,7 @@ export class AnselseService {
       recipeId,
       recipeVersion,
       adapterId,
+      adapterVersion: adapter.version,
       resolvedSpec: resolved.spec,
     });
     await this.deps.queue.enqueue({ projectId, requestSeq: event.seq });

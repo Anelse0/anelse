@@ -84,7 +84,13 @@ describe("reconstructRenderRequest (Provider-visible ⟺ Logged)", () => {
     const spec = { prompt: "…镜头 01…", model: "seedance-2.5" };
     const request = nextEvent(events, {
       type: "render/requested",
-      data: { recipeId: recipe.meta.id, recipeVersion: 2, adapterId: "seedance-2.5" as never, resolvedSpec: spec },
+      data: {
+        recipeId: recipe.meta.id,
+        recipeVersion: 2,
+        adapterId: "seedance-2.5" as never,
+        adapterVersion: "0.1.0",
+        resolvedSpec: spec,
+      },
       actorId,
       time: T0 + 3,
     });
@@ -92,6 +98,7 @@ describe("reconstructRenderRequest (Provider-visible ⟺ Logged)", () => {
 
     const rebuilt = reconstructRenderRequest(events, request.seq);
     expect(rebuilt.resolvedSpec).toEqual(spec);
+    expect(rebuilt.adapterVersion).toBe("0.1.0");
     expect(rebuilt.recipe.meta.version).toBe(2);
     expect(rebuilt.recipe.scene.lighting).toBe("暖色台灯侧光");
   });
@@ -100,7 +107,7 @@ describe("reconstructRenderRequest (Provider-visible ⟺ Logged)", () => {
     const { events, recipe } = buildLog();
     const request = nextEvent(events, {
       type: "render/requested",
-      data: { recipeId: recipe.meta.id, recipeVersion: 9, adapterId: "mock" as never, resolvedSpec: {} },
+      data: { recipeId: recipe.meta.id, recipeVersion: 9, adapterId: "mock" as never, adapterVersion: "0.0.0", resolvedSpec: {} },
       actorId,
       time: T0 + 3,
     });

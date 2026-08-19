@@ -8,7 +8,9 @@
       "@anselse/events": ["packages/events/src/index.ts"],
       "@anselse/db": ["packages/db/src/index.ts"],
       "@anselse/adapters": ["packages/adapters/src/index.ts"],
-      "@anselse/server": ["apps/server/src/index.ts"]
+      "@anselse/platform": ["packages/platform/src/index.ts"],
+      "@anselse/server": ["apps/server/src/index.ts"],
+      "@anselse/worker": ["apps/worker/src/index.ts"]
     },
     "types": ["node"]
   },

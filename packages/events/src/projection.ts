@@ -92,6 +92,7 @@ export function recipeAtVersion(
 export interface ReconstructedRenderRequest {
   recipe: Recipe;
   adapterId: ProjectEvent<"render/requested">["data"]["adapterId"];
+  adapterVersion: string;
   resolvedSpec: unknown;
 }
 
@@ -121,5 +122,82 @@ export function reconstructRenderRequest(
       requestSeq,
     );
   }
-  return { recipe, adapterId: event.data.adapterId, resolvedSpec: event.data.resolvedSpec };
+  return {
+    recipe,
+    adapterId: event.data.adapterId,
+    adapterVersion: event.data.adapterVersion,
+    resolvedSpec: event.data.resolvedSpec,
+  };
+}
+
+/** Take 读模型：完全由 render/requested + render/completed + take/* 折叠而来。 */
+export interface Take {
+  id: ProjectEvent<"render/completed">["data"]["takeId"];
+  /** provenance：任何视频永远能回放出它的配方版本与编译产物。 */
+  provenance: {
+    recipeId: RecipeId;
+    recipeVersion: number;
+    adapterId: ProjectEvent<"render/requested">["data"]["adapterId"];
+    adapterVersion: string;
+    resolvedSpec: unknown;
+    requestEventSeq: number;
+  };
+  media: ProjectEvent<"render/completed">["data"]["media"];
+  renderMs: number;
+  costCents?: number;
+  status: "unrated" | "selected" | "discarded";
+}
+
+/**
+ * 折叠出项目内的全部 Take（read model）。
+ * @throws ProjectionError render/completed 的 requestSeq 指向的不是 render/requested。
+ */
+export function projectTakes(events: readonly ProjectEvent[]): ReadonlyMap<Take["id"], Take> {
+  const requests = new Map<number, ProjectEvent<"render/requested">>();
+  const takes = new Map<Take["id"], Take>();
+  const takeSeqById = new Map<Take["id"], number>();
+
+  for (const event of events) {
+    switch (event.type) {
+      case "render/requested":
+        requests.set(event.seq, event);
+        break;
+      case "render/completed": {
+        const request = requests.get(event.data.requestSeq);
+        if (!request) {
+          throw new ProjectionError(
+            `render/completed requestSeq ${event.data.requestSeq} does not point at a render/requested`,
+            event.seq,
+          );
+        }
+        takes.set(event.data.takeId, {
+          id: event.data.takeId,
+          provenance: {
+            recipeId: request.data.recipeId,
+            recipeVersion: request.data.recipeVersion,
+            adapterId: request.data.adapterId,
+            adapterVersion: request.data.adapterVersion,
+            resolvedSpec: request.data.resolvedSpec,
+            requestEventSeq: request.seq,
+          },
+          media: event.data.media,
+          renderMs: event.data.durationMs,
+          ...(event.data.costCents !== undefined ? { costCents: event.data.costCents } : {}),
+          status: "unrated",
+        });
+        takeSeqById.set(event.data.takeId, event.seq);
+        break;
+      }
+      case "take/selected":
+      case "take/discarded": {
+        const take = takes.get(event.data.takeId);
+        // 未知/未完成的 take 状态事件安全忽略（读模型只反映已存在的 take）
+        if (take) take.status = event.type === "take/selected" ? "selected" : "discarded";
+        break;
+      }
+      default:
+        break;
+    }
+  }
+  return takes;
 }

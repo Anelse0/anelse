@@ -43,6 +43,7 @@ describe("nextEvent (typed append)", () => {
           recipeId: "r_1",
           recipeVersion: 1,
           adapterId: "mock",
+          adapterVersion: "0.0.0",
           resolvedSpec: { at: new Date() },
         } as never,
         actorId,

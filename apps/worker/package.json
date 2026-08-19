@@ -1,5 +1,5 @@
 {
-  "name": "@anselse/server",
+  "name": "@anselse/worker",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,9 +10,6 @@
     "@anselse/adapters": "workspace:*",
     "@anselse/events": "workspace:*",
     "@anselse/platform": "workspace:*",
-    "@anselse/recipe": "workspace:*",
-    "@trpc/server": "^11.0.0",
-    "fastify": "^5.0.0",
-    "zod": "^3.24.0"
+    "@anselse/recipe": "workspace:*"
   }
 }

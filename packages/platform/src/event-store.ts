@@ -1,7 +1,7 @@
 /**
  * EventStore 接缝：Service Definition + 内存 Provider。
- * Postgres Provider（Drizzle/Supabase）在连接串就绪后加入——Consumer（service 层）
- * 只依赖本接口，换 Provider 不改一行业务代码。
+ * server（生产者）与 worker（消费者）共同的持久化契约；Postgres Provider
+ * （Drizzle/Supabase）在连接串就绪后加入——两侧业务代码都不改。
  */
 import type { ProjectEvent } from "@anselse/events";
 import type { ProjectId } from "@anselse/recipe";

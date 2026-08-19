@@ -26,6 +26,9 @@ importers:
       '@anselse/events':
         specifier: workspace:*
         version: link:../../packages/events
+      '@anselse/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
       '@anselse/recipe':
         specifier: workspace:*
         version: link:../../packages/recipe
@@ -38,6 +41,21 @@ importers:
       zod:
         specifier: ^3.24.0
         version: 3.25.76
+
+  apps/worker:
+    dependencies:
+      '@anselse/adapters':
+        specifier: workspace:*
+        version: link:../../packages/adapters
+      '@anselse/events':
+        specifier: workspace:*
+        version: link:../../packages/events
+      '@anselse/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
+      '@anselse/recipe':
+        specifier: workspace:*
+        version: link:../../packages/recipe
 
   packages/adapters:
     dependencies:
@@ -68,6 +86,15 @@ importers:
       zod:
         specifier: ^3.24.0
         version: 3.25.76
+
+  packages/platform:
+    dependencies:
+      '@anselse/events':
+        specifier: workspace:*
+        version: link:../events
+      '@anselse/recipe':
+        specifier: workspace:*
+        version: link:../recipe
 
   packages/recipe:
     dependencies:

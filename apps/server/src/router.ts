@@ -8,7 +8,7 @@ import { z } from "zod";
 import { recipeDraftSchema } from "@anselse/recipe";
 import { patchOpSchema } from "@anselse/events";
 import { AnselseService, NotFoundError, VersionConflictError } from "./service.ts";
-import { StoreConflictError } from "./store.ts";
+import { StoreConflictError } from "@anselse/platform";
 import type { ActorId } from "@anselse/events";
 
 export interface RequestContext {

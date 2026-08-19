@@ -74,13 +74,24 @@ export const EVENT_SCHEMAS = {
     recipeId: recipeIdSchema,
     recipeVersion: z.number().int().positive(),
     adapterId: adapterIdSchema,
+    /** adapter 自身版本，进入 Take provenance（编译规则可追溯）。 */
+    adapterVersion: z.string().min(1),
     resolvedSpec: z.unknown(),
   }),
 
-  /** requestSeq 指回对应的 render/requested 事件。 */
+  /**
+   * requestSeq 指回对应的 render/requested 事件。
+   * media 入日志：Take 读模型可完全从 render/requested + render/completed 投影
+   * （Model-visible ⟺ Logged 的延伸——渲染产物也从日志重建）。
+   */
   "render/completed": z.object({
     requestSeq: z.number().int().nonnegative(),
     takeId: takeIdSchema,
+    media: z.object({
+      videoUrl: z.string().min(1),
+      thumbUrl: z.string().min(1).optional(),
+      durationSec: z.number().int().positive(),
+    }),
     providerJobId: z.string().optional(),
     durationMs: z.number().int().nonnegative(),
     costCents: z.number().int().nonnegative().optional(),

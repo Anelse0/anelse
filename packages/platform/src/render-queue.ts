@@ -1,5 +1,5 @@
 /**
- * RenderQueue 接缝：Service Definition + 内存 Provider（pg-boss Provider 随 M5 接入）。
+ * RenderQueue 接缝：Service Definition + 内存 Provider（pg-boss Provider 随接线接入）。
  * job 载荷只带 (projectId, requestSeq)——worker 从日志重建请求，不信任队列载荷
  * （真相源只有日志）。
  */

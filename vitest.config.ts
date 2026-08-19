@@ -9,7 +9,9 @@ export default defineConfig({
       "@anselse/recipe": fileURLToPath(new URL("./packages/recipe/src/index.ts", import.meta.url)),
       "@anselse/events": fileURLToPath(new URL("./packages/events/src/index.ts", import.meta.url)),
       "@anselse/adapters": fileURLToPath(new URL("./packages/adapters/src/index.ts", import.meta.url)),
+      "@anselse/platform": fileURLToPath(new URL("./packages/platform/src/index.ts", import.meta.url)),
       "@anselse/server": fileURLToPath(new URL("./apps/server/src/index.ts", import.meta.url)),
+      "@anselse/worker": fileURLToPath(new URL("./apps/worker/src/index.ts", import.meta.url)),
     },
   },
   test: {

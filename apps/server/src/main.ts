@@ -4,9 +4,8 @@
  */
 import { randomUUID } from "node:crypto";
 import { createAdapterRegistry, MockAdapter, Seedance25Adapter, Kling3Adapter } from "@anselse/adapters";
+import { MemoryEventStore, MemoryRenderQueue } from "@anselse/platform";
 import { AnselseService } from "./service.ts";
-import { MemoryEventStore } from "./store.ts";
-import { MemoryRenderQueue } from "./queue.ts";
 import { createApp } from "./app.ts";
 
 const adapters = createAdapterRegistry();

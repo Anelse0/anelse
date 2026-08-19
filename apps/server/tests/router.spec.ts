@@ -7,13 +7,8 @@ import {
   Kling3Adapter,
 } from "@anselse/adapters";
 import type { ActorId } from "@anselse/events";
-import {
-  AnselseService,
-  MemoryEventStore,
-  MemoryRenderQueue,
-  appRouter,
-  createCallerFactory,
-} from "@anselse/server";
+import { MemoryEventStore, MemoryRenderQueue } from "@anselse/platform";
+import { AnselseService, appRouter, createCallerFactory } from "@anselse/server";
 import { breakupDraft } from "../../../packages/recipe/tests/fixtures/breakup-ots.ts";
 
 function makeCaller() {

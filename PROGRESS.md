@@ -77,6 +77,18 @@
 - **真实冒烟**：`node --experimental-strip-types` 直跑 main.ts，healthz + tRPC project.create 走通 HTTP。
 - **新工程约定（踩坑后确立）**：仅用可擦除 TS 语法（参数属性全库清除）——dsh source-launch 契约同款，已写入 05-dev-plan。
 
+## 2026-08-18 · M5 完成（74/74 全绿）——渲染闭环打通 🎥
+
+**架构重构（趁早做对）**：抽出 `@anselse/platform` 共享包，承载 EventStore / RenderQueue / MediaStore / IdGenerator / Clock 接缝——server（生产者）与 worker（消费者）是同级消费者，避免 worker 反向依赖 HTTP app。store/queue 从 apps/server 迁出，IdGenerator/Clock 从 service 迁出。
+
+**完成**
+- `apps/worker`：`RenderWorker.processJob` 幂等消费——从日志重建请求（不信任队列载荷）→ adapter.render → MediaStore 落库 → append render/completed 或 render/failed；`drainQueue` 内存驱动。
+- 事件演进：render/requested +adapterVersion、render/completed +media（Take 现可完全从日志投影）；新增 `projectTakes` 投影（render/requested + completed + take/* 折叠出 Take 读模型，带完整 provenance）。
+- **端到端闭环测试**：project→recipe→requestRender→queue→worker→render/completed→projectTakes 得到带完整 provenance 的 Take + 视频可 reconstructRenderRequest 回放配方；幂等（重复处理不重复 append）；adapter 抛错→render/failed(provider_error)；adapter 下线→失败。
+- dsh 功课：幂等（at-least-once 前提）、不信任队列载荷（真相源只有日志）、结构化失败分类。
+
+**后端骨架至此完整**（M1–M5）：领域核心 → 事件日志 → adapter 编译 → HTTP service → 渲染 worker，全部内存/Fake Provider 跑通、74 测试锁定。
+
 **待办衔接**
-- M4.5（外部依赖）：Supabase 接线——EventStore Postgres Provider、Auth JWT 替换占位、drizzle 迁移、集成测试（无连接串自跳过）。**等待用户开通 Supabase。**
-- 下一步可并行：M5 worker（用内存队列 + MockAdapter 先打通端到端渲染闭环）。
+- M4.5（外部依赖，**等用户开通 Supabase**）：EventStore Postgres Provider、RenderQueue pg-boss Provider、MediaStore R2 Provider、Auth JWT、drizzle 迁移、worker 独立进程入口、集成测试（无连接串自跳过）。
+- M6：apps/web（Vite + tokens + 编辑器 MVP + Take 工作台），依赖 tRPC 契约（已稳）。

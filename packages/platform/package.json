@@ -1,0 +1,13 @@
+{
+  "name": "@anselse/platform",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@anselse/events": "workspace:*",
+    "@anselse/recipe": "workspace:*"
+  }
+}
