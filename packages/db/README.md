@@ -34,5 +34,3 @@ pnpm test:integration   # 真实 DB 往返测试；无 PG* 或不可达时自跳
 - [ ] RenderQueue 的 pg-boss Provider（独立 schema，同实例）+ worker 独立进程入口
 - [ ] MediaStore 的 R2 Provider（待 R2 凭证）
 - [ ] Auth：Supabase JWT 校验替换 `x-actor-id` 占位
-
-> 注：迁移与集成测试需在**能直连数据库**的环境运行。开发机若开启 VPN/代理的 fake-ip 模式（DNS 返回 198.18.x.x），Postgres 协议会被黑洞——关掉代理或在部署环境运行。

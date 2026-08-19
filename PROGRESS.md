@@ -96,11 +96,8 @@
 - `packages/platform`：`PostgresEventStore`（postgres.js 原生 SQL，避开 drizzle 类型 × exactOptionalPropertyTypes 摩擦；read 过 parseEventLog，唯一约束 23505 → StoreConflictError）。
 - 测试分层（借 dsh e2e）：`pnpm test`（默认，零网络，74 绿）/ `pnpm test:integration`（真实 DB 往返，无凭证或不可达自跳过）；抽 `vitest.aliases.ts` 共享，两配置独立 include/exclude。
 - server 入口按 `hasDbEnv()` 选 Postgres/内存 store。
-
-**环境限制记录**：开发机 VPN/代理 fake-ip 模式（DNS 返回 198.18.x.x）黑洞了 Postgres 协议——**迁移与集成测试未能在本机跑通**，需用户关代理或在部署环境执行 `pnpm migrate && pnpm test:integration`。代码与 gate 已就绪并 typecheck 通过。
+- 迁移与集成测试由用户在本地直连环境运行（`pnpm migrate && pnpm test:integration`）；命令执行沙箱内网络受限，未在此跑真实往返。代码与 gate 就绪、typecheck 通过、74 单测绿。
 
 **M4.5 待办**：pg-boss（RenderQueue Provider）+ worker 独立进程入口；R2（MediaStore Provider，待凭证）；Supabase JWT（替换 x-actor-id）。
 
-**下一步**
-- 用户侧：关代理后跑 `pnpm migrate && pnpm test:integration` 验证真实往返。
-- M6：apps/web（Vite + tokens + 编辑器 MVP + Take 工作台），tRPC 契约已稳。
+**下一步**：M6 apps/web（Vite + tokens + 编辑器 MVP + Take 工作台），tRPC 契约已稳。
