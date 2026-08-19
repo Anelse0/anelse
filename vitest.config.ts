@@ -1,20 +1,11 @@
 import { defineConfig } from "vitest/config";
-import { fileURLToPath } from "node:url";
+import { workspaceAliases } from "./vitest.aliases.ts";
 
-/** 源码面测试：工作区包直指 src，无需构建（tsconfig paths 同映射）。 */
+/** 默认套件：零网络。集成测试（真实 DB）单独走 test:integration。 */
 export default defineConfig({
-  resolve: {
-    alias: {
-      "@anselse/vocab": fileURLToPath(new URL("./packages/vocab/src/index.ts", import.meta.url)),
-      "@anselse/recipe": fileURLToPath(new URL("./packages/recipe/src/index.ts", import.meta.url)),
-      "@anselse/events": fileURLToPath(new URL("./packages/events/src/index.ts", import.meta.url)),
-      "@anselse/adapters": fileURLToPath(new URL("./packages/adapters/src/index.ts", import.meta.url)),
-      "@anselse/platform": fileURLToPath(new URL("./packages/platform/src/index.ts", import.meta.url)),
-      "@anselse/server": fileURLToPath(new URL("./apps/server/src/index.ts", import.meta.url)),
-      "@anselse/worker": fileURLToPath(new URL("./apps/worker/src/index.ts", import.meta.url)),
-    },
-  },
+  resolve: { alias: workspaceAliases },
   test: {
     include: ["packages/*/tests/**/*.spec.ts", "apps/*/tests/**/*.spec.ts"],
+    exclude: ["**/node_modules/**", "**/*.integration.spec.ts"],
   },
 });

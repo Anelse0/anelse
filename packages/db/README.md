@@ -15,9 +15,24 @@ Drizzle 表结构（Supabase Postgres）。
 - 事件写入走 `@anselse/events` 的 `nextEvent`（类型校验 + JSON 可序列化检查）后落库。
 - 事件读出**必须**过 `parseEvent` / `parseEventLog`（durable 边界必校验；未知必需事件拒绝重建）。
 
-## 集成状态（pending）
+## 连接与迁移
 
-- [ ] Supabase 项目开通 → 连接串入 server/worker 环境变量
-- [ ] drizzle-kit 迁移脚本 + `events` 表的 UPDATE/DELETE 权限收回（RLS/grant 层面强制 append-only）
-- [ ] pg-boss 初始化（独立 schema，跑在同一实例）
-- [ ] 集成测试（真连接，无连接串自跳过——借 dsh e2e 自跳过机制）
+连接参数从 `.env` 的 `PG*` 变量读取（离散参数，规避密码特殊字符编码）。`createDb()` 缺变量即 fail loud；`hasDbEnv()` 供集成测试自跳过判断。
+
+```bash
+pnpm migrate            # 建表（幂等，migrations/*.sql）
+pnpm test:integration   # 真实 DB 往返测试；无 PG* 或不可达时自跳过
+```
+
+`PostgresEventStore`（在 `@anselse/platform`）用 postgres.js 原生 SQL 读写 `events`，read 出的行过 `parseEventLog`（durable 边界校验），append 命中唯一约束（23505）→ `StoreConflictError`。
+
+## 集成状态
+
+- [x] Supabase 连接工厂（`createDb`）+ 建表迁移（`0001_init.sql`，含 events 的 UPDATE/DELETE 收回）
+- [x] `PostgresEventStore` + 集成测试（真往返，自跳过）
+- [x] server 入口按 `hasDbEnv()` 选择 Postgres / 内存 store
+- [ ] RenderQueue 的 pg-boss Provider（独立 schema，同实例）+ worker 独立进程入口
+- [ ] MediaStore 的 R2 Provider（待 R2 凭证）
+- [ ] Auth：Supabase JWT 校验替换 `x-actor-id` 占位
+
+> 注：迁移与集成测试需在**能直连数据库**的环境运行。开发机若开启 VPN/代理的 fake-ip 模式（DNS 返回 198.18.x.x），Postgres 协议会被黑洞——关掉代理或在部署环境运行。

@@ -3,3 +3,4 @@
  * 集成状态：schema 已定，Supabase 项目开通后接连接串与迁移（见 README）。
  */
 export * from "./schema.ts";
+export * from "./client.ts";

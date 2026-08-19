@@ -7,7 +7,9 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@anselse/db": "workspace:*",
     "@anselse/events": "workspace:*",
-    "@anselse/recipe": "workspace:*"
+    "@anselse/recipe": "workspace:*",
+    "postgres": "^3.4.5"
   }
 }

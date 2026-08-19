@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@anselse/adapters": "workspace:*",
+    "@anselse/db": "workspace:*",
     "@anselse/events": "workspace:*",
     "@anselse/platform": "workspace:*",
     "@anselse/recipe": "workspace:*",

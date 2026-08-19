@@ -5,5 +5,6 @@
  */
 export * from "./runtime.ts";
 export * from "./event-store.ts";
+export * from "./postgres-event-store.ts";
 export * from "./render-queue.ts";
 export * from "./media-store.ts";

@@ -10,6 +10,8 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:integration": "node --env-file=.env node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts",
+    "migrate": "node --env-file=.env --experimental-strip-types packages/db/src/migrate.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "devDependencies": {
