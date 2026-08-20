@@ -13,6 +13,7 @@
     "@anselse/recipe": "workspace:*",
     "@anselse/vocab": "workspace:*",
     "@fontsource/figtree": "^5.1.0",
+    "@trpc/client": "^11.18.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "zustand": "^5.0.0"

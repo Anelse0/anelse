@@ -10,7 +10,8 @@
     "paths": {
       "@anselse/vocab": ["../../packages/vocab/src/index.ts"],
       "@anselse/recipe": ["../../packages/recipe/src/index.ts"],
-      "@anselse/adapters": ["../../packages/adapters/src/index.ts"]
+      "@anselse/adapters": ["../../packages/adapters/src/index.ts"],
+      "@anselse/server/api-types": ["../../apps/server/src/api-types.ts"]
     }
   },
   "include": ["src"]

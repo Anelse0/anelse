@@ -53,6 +53,18 @@ export type RenderRequestResult =
   | { ok: true; requestSeq: number; warnings: AxisWarning[] }
   | { ok: false; rejections: AxisRejection[] };
 
+/** 渲染工作台的一行（render/* 事件折叠而来）。 */
+export interface RenderRow {
+  requestSeq: number;
+  adapterId: string;
+  recipeId: string;
+  recipeVersion: number;
+  status: "pending" | "completed" | "failed";
+  takeId?: string;
+  videoUrl?: string;
+  detail?: string;
+}
+
 export interface ServiceDeps {
   store: EventStore;
   queue: RenderQueue;
@@ -195,6 +207,37 @@ export class AnselseService {
 
   async listRecipes(projectId: ProjectId): Promise<RecipeVersions> {
     return projectRecipeVersions(await this.deps.store.read(projectId));
+  }
+
+  /** 渲染工作台数据：折叠 render/* 事件为按请求的状态行（pending/completed/failed）。 */
+  async listRenders(projectId: ProjectId): Promise<RenderRow[]> {
+    const events = await this.deps.store.read(projectId);
+    const rows = new Map<number, RenderRow>();
+    for (const e of events) {
+      if (e.type === "render/requested") {
+        rows.set(e.seq, {
+          requestSeq: e.seq,
+          adapterId: e.data.adapterId,
+          recipeId: e.data.recipeId,
+          recipeVersion: e.data.recipeVersion,
+          status: "pending",
+        });
+      } else if (e.type === "render/completed") {
+        const row = rows.get(e.data.requestSeq);
+        if (row) {
+          row.status = "completed";
+          row.takeId = e.data.takeId;
+          row.videoUrl = e.data.media.videoUrl;
+        }
+      } else if (e.type === "render/failed") {
+        const row = rows.get(e.data.requestSeq);
+        if (row) {
+          row.status = "failed";
+          row.detail = e.data.detail;
+        }
+      }
+    }
+    return [...rows.values()].reverse(); // 最新在前
   }
 
   private async recipeHead(projectId: ProjectId, recipeId: RecipeId): Promise<Recipe> {

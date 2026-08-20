@@ -114,3 +114,20 @@
 - **浏览器实测**（127.0.0.1:5173）：三栏渲染正常；切 Seedance→Kling，30s 配方即时显示 duration + 多镜双拒绝，slow_push_in 标注设计级——"诚实控制"落成界面。后端 74 测试回归绿。
 
 **待办衔接**：M6.2（tRPC 客户端 + 持久化/渲染 + Take 工作台）；M6.3（Supabase Auth + JWT）。
+
+## 2026-08-19 · M6.2 完成（浏览器→事件日志→渲染闭环，HTTP 实测通过）
+
+**后端**
+- 服务层 `listRenders`（折叠 render/* 为 pending/completed/failed 行）+ router `render.list` query。
+- Fastify CORS（dev 允许 Vite 源）。
+- server `main.ts` dev 一体化：内存队列 + **进程内 RenderWorker 每 400ms 轮询排空**（mirrors pg-boss），FakeMediaStore。
+- **接缝隔离**：带 node 依赖的 `PostgresEventStore` 从 platform 主出口移到子路径 `@anselse/platform/postgres`——保持主出口浏览器安全，前端 tsc 不再被 process/db 污染。
+
+**前端**
+- tRPC 客户端（type-only 引 `@anselse/server/api-types` 的 AppRouter，端到端类型安全；x-actor-id 占位）。
+- `session` store：保存并渲染（create project→create recipe(绑当前模型)→request render→轮询盯 requestSeq）+ 渲染工作台底栏。
+- MVP 决策：每次「保存并渲染」创建一个配方快照，跑通闭环；编辑→patch→版本演进留待后续。
+
+**浏览器实测**（API 内存 store + vite）：Mock → `completed` 带 stored:// URL；Seedance → `failed`（render 未接线，原因清晰）。两条路径正确。后端 74 测试 + typecheck + web build 全绿。
+
+**待办衔接**：M6.3（Supabase Auth 登录 + 后端 JWT 校验替换 x-actor-id）；M4.5 剩余（pg-boss 独立 worker 进程、R2 待凭证）。真实 Supabase 往返由用户环境验证（沙箱连不上）。

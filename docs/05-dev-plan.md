@@ -29,7 +29,7 @@
 | M5 | `apps/worker` + `platform` | 渲染闭环（幂等、日志重建、Take 投影）；抽出共享接缝包 | M3, M4 | ✅ |
 | M4.5 | Supabase 接线 | PostgresEventStore + 建表迁移 + 集成 gate；server 按环境选 store | M2, M4 | 🟡 部分 |
 | M6.1 | `apps/web` 编辑器 | Vite + 单色 tokens + shot-strip/剧本卡编辑器 + **实时编译预览 + capability 感知**（零后端） | M3.5 | ✅ |
-| M6.2 | web 持久化/渲染 | tRPC 客户端 → 保存/渲染请求 + Take 工作台 | M4, M6.1 | ⬜ |
+| M6.2 | web 持久化/渲染 | tRPC 客户端 → 保存/渲染请求 + 渲染工作台；进程内 worker（dev） | M4, M6.1 | ✅ |
 | M6.3 | web 认证 | Supabase Auth 登录 + 后端 JWT 校验（替换占位） | M6.2 | ⬜ |
 
 ### M4.5 剩余（未阻塞 M6）

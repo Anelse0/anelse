@@ -119,6 +119,9 @@ export const appRouter = t.router({
           ),
         ),
       ),
+    list: t.procedure.input(projectIdInput).query(({ ctx, input }) =>
+      wrap(() => ctx.service.listRenders(input.projectId as never)),
+    ),
   }),
 
   take: t.router({

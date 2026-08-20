@@ -3,6 +3,7 @@ import { useEditor } from "./store.ts";
 import { compileDraft, capabilitiesOf, ADAPTER_LABELS, type AdapterId } from "./compile.ts";
 import { Editor } from "./components/Editor.tsx";
 import { Preview } from "./components/Preview.tsx";
+import { RenderBar } from "./components/RenderBar.tsx";
 
 const MODELS: AdapterId[] = ["seedance-2.5", "kling-v3", "mock"];
 
@@ -57,6 +58,8 @@ export function App() {
           <Preview output={output} />
         </section>
       </div>
+
+      <RenderBar canRender={Boolean(output.prompt)} />
     </div>
   );
 }

@@ -7,6 +7,7 @@ export const workspaceAliases: Record<string, string> = {
   "@anselse/events": fileURLToPath(new URL("./packages/events/src/index.ts", import.meta.url)),
   "@anselse/db": fileURLToPath(new URL("./packages/db/src/index.ts", import.meta.url)),
   "@anselse/adapters": fileURLToPath(new URL("./packages/adapters/src/index.ts", import.meta.url)),
+  "@anselse/platform/postgres": fileURLToPath(new URL("./packages/platform/src/postgres-event-store.ts", import.meta.url)),
   "@anselse/platform": fileURLToPath(new URL("./packages/platform/src/index.ts", import.meta.url)),
   "@anselse/server": fileURLToPath(new URL("./apps/server/src/index.ts", import.meta.url)),
   "@anselse/worker": fileURLToPath(new URL("./apps/worker/src/index.ts", import.meta.url)),

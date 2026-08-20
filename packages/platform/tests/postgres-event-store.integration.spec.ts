@@ -5,10 +5,8 @@
  */
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { createDb, hasDbEnv, type DbHandle } from "@anselse/db";
-import {
-  PostgresEventStore,
-  StoreConflictError,
-} from "@anselse/platform";
+import { StoreConflictError } from "@anselse/platform";
+import { PostgresEventStore } from "@anselse/platform/postgres";
 import { nextEvent, projectRecipeVersions, type ActorId } from "@anselse/events";
 import { resolveRecipe, type ProjectId } from "@anselse/recipe";
 import { breakupDraft } from "../../recipe/tests/fixtures/breakup-ots.ts";

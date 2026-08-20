@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./api-types": "./src/api-types.ts"
   },
   "dependencies": {
     "@anselse/adapters": "workspace:*",
@@ -12,6 +13,8 @@
     "@anselse/events": "workspace:*",
     "@anselse/platform": "workspace:*",
     "@anselse/recipe": "workspace:*",
+    "@anselse/worker": "workspace:*",
+    "@fastify/cors": "^11.3.0",
     "@trpc/server": "^11.0.0",
     "fastify": "^5.0.0",
     "zod": "^3.24.0"
