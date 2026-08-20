@@ -101,3 +101,16 @@
 **M4.5 待办**：pg-boss（RenderQueue Provider）+ worker 独立进程入口；R2（MediaStore Provider，待凭证）；Supabase JWT（替换 x-actor-id）。
 
 **下一步**：M6 apps/web（Vite + tokens + 编辑器 MVP + Take 工作台），tRPC 契约已稳。
+
+## 2026-08-19 · M6.1 完成（前端编辑器 + 实时编译预览，浏览器验证通过）
+
+**关键架构洞察**：`resolve()` 编译器纯函数且浏览器安全 → 编辑器 + capability 感知 + 编译预览**零后端**跑在浏览器内。后端只在保存/真实渲染时才需要。
+
+**完成**
+- `apps/web`：Vite + React SPA；**单色黑白 design token**（`tokens.css`，用户指定 black + Figtree、暂不引入第二色；capability 三态靠排版/描边区分不靠颜色）；三栏工作台（shot-strip / 剧本卡编辑器 / 编译预览）。
+- **实时编译预览**：改字段 → 右侧即时重编译目标模型 prompt（Seedance/Kling 各自格式）；`compileDraft` 复用域包纯函数。
+- **capability 感知**：不支持轴置灰、设计级标注；配方无法渲染时编译期拒绝并说明"不浪费渲染"。
+- 工程：web 独立 tsconfig（DOM/JSX/esModuleInterop），root tsconfig 排除 apps/web；`vite-env.d.ts` 处理 css 副作用导入。tsc + vite build 通过。
+- **浏览器实测**（127.0.0.1:5173）：三栏渲染正常；切 Seedance→Kling，30s 配方即时显示 duration + 多镜双拒绝，slow_push_in 标注设计级——"诚实控制"落成界面。后端 74 测试回归绿。
+
+**待办衔接**：M6.2（tRPC 客户端 + 持久化/渲染 + Take 工作台）；M6.3（Supabase Auth + JWT）。

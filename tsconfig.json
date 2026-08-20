@@ -19,5 +19,6 @@
     "packages/*/tests/**/*.ts",
     "apps/*/src/**/*.ts",
     "apps/*/tests/**/*.ts"
-  ]
+  ],
+  "exclude": ["**/node_modules", "apps/web"]
 }

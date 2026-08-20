@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@anselse/vocab": ["../../packages/vocab/src/index.ts"],
+      "@anselse/recipe": ["../../packages/recipe/src/index.ts"],
+      "@anselse/adapters": ["../../packages/adapters/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}
